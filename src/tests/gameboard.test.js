@@ -40,7 +40,6 @@ test("records missed attacks", () => {
 });
 
 test("knows when all ships have been sunk", () => {
-    console.log(board.shipsAlive());
     expect(board.shipsAlive().length).toBe(1);
     board.receiveAttack({x: 4, y: 3});
     expect(board.shipsAlive().length).toBe(0);
