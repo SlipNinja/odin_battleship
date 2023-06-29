@@ -25,11 +25,13 @@ class Gameboard{
             rotated: rotated
         };
 
-        if(this.validPos(newShipData.pos)) this.ships.push(newShipData);
+        if(this.validPos(newShipData.pos, null)) this.ships.push(newShipData);
     }
 
-    validPos(pos){
-        return pos.every(this.inGrid);
+    validPos(pos, ship){
+        const inBound = pos.every(this.inGrid);
+        const overlap = this.overlapShip(pos, ship);
+        return inBound && !(overlap);
     }
 
     // Arrow function notation to bind the Gameboard to this
@@ -37,15 +39,41 @@ class Gameboard{
         return (pos.x >= 0 && pos.x < this.width) && (pos.y >= 0 && pos.y < this.height);
     };
 
+    overlapShip(posList, curShipData){
+
+        // Filter current ship out, if already placed
+        const otherShips = this.ships.filter(shipData => {
+            if(curShipData !== null){
+                return curShipData.object !== shipData.object;
+            }
+            return true;
+        });
+
+        // Get every ship pos
+        const otherPositions = otherShips.reduce((newPoslist, shipData) => {
+            return [...newPoslist, ...shipData.pos];
+        }, []);
+
+        // Find if there's any other ship in the way
+        return otherPositions.some(pos => {
+            for (let i = 0; i < posList.length; i++) {
+                const newpos = JSON.stringify(posList[i]);
+                const oldpos = JSON.stringify(pos);
+                if(newpos === oldpos) return true;
+            }
+            return false;
+        });
+    }
+
     moveShip(shipData, newPos){
         const posList = this.computePos(newPos, shipData.object.length, shipData.rotated);
-        if(this.validPos(posList)) shipData.pos = posList;
+        if(this.validPos(posList, shipData)) shipData.pos = posList;
     }
 
     rotateShip(shipData){
         const invertedRotation = !shipData.rotated;
         const posList = this.computePos(shipData.pos[0], shipData.object.length, invertedRotation);
-        if(this.validPos(posList)){
+        if(this.validPos(posList, shipData)){
             shipData.pos = posList;
             shipData.rotated = invertedRotation;
         }
