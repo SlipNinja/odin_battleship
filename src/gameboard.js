@@ -18,6 +18,7 @@ class Gameboard{
         this.hits = Array.from({length: height}, e => Array(width).fill(0));
     }
 
+    // Adds ship at pos, rotated means vertically instead of horizontally
     addShip(ship, pos, rotated = false){
         const newShipData = {
             object: ship,
@@ -28,17 +29,20 @@ class Gameboard{
         if(this.validPos(newShipData.pos, null)) this.ships.push(newShipData);
     }
 
+    // Returns true if the future pos is inbound and does not overlap other ships
     validPos(pos, ship){
         const inBound = pos.every(this.inGrid);
         const overlap = this.overlapShip(pos, ship);
         return inBound && !(overlap);
     }
 
+    // Returns true if pos is inbound
     // Arrow function notation to bind the Gameboard to this
     inGrid = (pos) => {
         return (pos.x >= 0 && pos.x < this.width) && (pos.y >= 0 && pos.y < this.height);
     };
 
+    // Returns true if the posList don't overlap other ships's positions
     overlapShip(posList, curShipData){
 
         // Filter current ship out, if already placed
@@ -65,11 +69,13 @@ class Gameboard{
         });
     }
 
+    // Move ship to new pos
     moveShip(shipData, newPos){
         const posList = this.computePos(newPos, shipData.object.length, shipData.rotated);
         if(this.validPos(posList, shipData)) shipData.pos = posList;
     }
 
+    // Rotate ship vertically if horizontal and vice versa
     rotateShip(shipData){
         const invertedRotation = !shipData.rotated;
         const posList = this.computePos(shipData.pos[0], shipData.object.length, invertedRotation);
@@ -79,6 +85,7 @@ class Gameboard{
         }
     }
 
+    // Compute all position for future ship
     computePos(initialPos, length, rotated){
         const allPos = [initialPos];
         for (let i = 0; i < length-1; i++) {
@@ -94,6 +101,7 @@ class Gameboard{
         return allPos;
     }
 
+    // Handles attacks on the board
     receiveAttack(pos){
         let shipHit = false;
         this.ships.forEach(shipData => {
@@ -107,6 +115,7 @@ class Gameboard{
         this.hits[pos.x][pos.y] = shipHit ? 1 : 2;
     }
 
+    // Returns true if ship is hit
     isShipHit = (ship, pos) => {
         let shipHit = false;
         ship.pos.forEach(p => {
@@ -115,10 +124,7 @@ class Gameboard{
         return shipHit;
     }
 
-    getShipByPos(pos){
-        return this.ships.find(data => JSON.stringify(data.pos) === JSON.stringify({x: 1, y: 1}));
-    }
-
+    // Returns all ships alive
     shipsAlive(){
         const alive = [];
         this.ships.forEach(shipData => {
