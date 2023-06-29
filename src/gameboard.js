@@ -1,5 +1,5 @@
-import { Ship } from "./ship";
 
+// Gameboard.ships
 /*
 [
     {
