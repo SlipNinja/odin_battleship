@@ -5,10 +5,12 @@ class Ship{
         this.length = length;
     }
 
+    // Handles incoming hit
     hit(){
         this.hits += 1;
     }
 
+    // Returns true if every tiles of the ship has been hit
     isSunk(){
         return this.hits >= this.length;
     }
