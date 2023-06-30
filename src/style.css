@@ -4,13 +4,14 @@
 }
 
 #mainElement {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     height: 100vh;
-    grid-template-rows: 60px 2fr 60px;
 }
 
 /* HEADER */
 #header {
+    flex: 0 0 60px;
     background-color: red;
     display: flex;
     justify-content: flex-start;
@@ -32,6 +33,7 @@
 
 /* CONTENT */
 #content {
+    flex: 1 1 auto;
     background-color: green;
     display: flex;
 }
@@ -44,12 +46,51 @@
 #boardsPanel {
     background-color: brown;
     flex: 4;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#leftBoard, #rightBoard {
+    flex: 1;
+    background-color: pink;
+    display: grid;
+    grid-template-rows: 40px 1fr;
+    align-items: center;
+    height: 100%;
+}
+
+#leftText, #rightText {
+    justify-self: center;
+}
+
+#playerBoard, #enemyBoard {
+    display: grid;
+    margin: 5px;
+    border: 2px solid rgb(0, 50, 50);
+}
+
+.box {
+    background-color: rgb(50, 100, 250);
+    border: 1px solid rgb(0, 50, 50);
+    aspect-ratio: 1 / 1;
+}
+
+.box:hover {
+    box-shadow: 0px 0px 20px red;
+    z-index: 1;
+    background-color: rgb(40, 80, 200);
+}
+
+.box:active {
+    background-color: rgb(30, 60, 150);
 }
 
 
 /* FOOTER */
 #footer {
-    background-color: blue;
+    flex: 0 0 80px;
+    background-color: rgb(50, 100, 250);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -60,4 +101,5 @@
     width: 175px;
     height: 40px;
     max-height: 90%;
+
 }

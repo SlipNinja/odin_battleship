@@ -1,5 +1,14 @@
-function buildPage() {
 
+function buildPage(boardSizeX, boardSizeY) {
+    // Build
+    buildMainElement();
+    buildBoards(boardSizeX, boardSizeY);
+
+    // Adds events
+
+}
+
+function buildMainElement() {
     // Creates DOM elements
     const mainElement = document.createElement("div");
     mainElement.id = "mainElement";
@@ -14,9 +23,6 @@ function buildPage() {
     mainElement.appendChild(content);
     mainElement.appendChild(footer);
     document.body.appendChild(mainElement);
-
-    // Adds events
-    
 }
 
 function buildHeader() {
@@ -42,10 +48,63 @@ function buildContent() {
     const boardsPanel = document.createElement("div");
     boardsPanel.id = "boardsPanel";
 
+    const leftBoard = document.createElement("div");
+    leftBoard.id = "leftBoard";
+
+    const rightBoard = document.createElement("div");
+    rightBoard.id = "rightBoard";
+
+    const leftText = document.createElement("div");
+    leftText.id = "leftText";
+    leftText.innerHTML = "Your board";
+
+    const rightText = document.createElement("div");
+    rightText.id = "rightText";
+    rightText.innerHTML = "Enemy board";
+
+    leftBoard.appendChild(leftText);
+    rightBoard.appendChild(rightText);
+
+    boardsPanel.appendChild(leftBoard);
+    boardsPanel.appendChild(rightBoard);
+
     content.appendChild(leftPanel);
     content.appendChild(boardsPanel);
 
     return content;
+}
+
+function buildBoards(sizeX, sizeY) {
+    const leftBoard = document.getElementById("leftBoard");
+    const rightBoard = document.getElementById("rightBoard");
+
+    const playerBoard = buildBoard(sizeX, sizeY);
+    playerBoard.id = "playerBoard";
+
+    const enemyBoard = buildBoard(sizeX, sizeY);
+    enemyBoard.id = "enemyBoard";
+
+    leftBoard.appendChild(playerBoard);
+    rightBoard.appendChild(enemyBoard);
+}
+
+function buildBoard(sizeX, sizeY) {
+    const newBoard = document.createElement("div");
+    newBoard.style.gridTemplateColumns = `repeat(${sizeX}, 1fr)`;
+    newBoard.style.gridTemplateRows = `repeat(${sizeY}, 1fr)`;
+
+    for (let y = 0; y < sizeY; y++) {
+        for (let x = 0; x < sizeX; x++) {
+            const newBox = document.createElement("div");
+            newBox.dataset.x = x;
+            newBox.dataset.y = y;
+            newBox.classList.add("box");
+            newBoard.append(newBox);
+        }
+    }
+
+    //console.log(sizeX, sizeY, width);
+    return newBoard;
 }
 
 function buildFooter() {
@@ -61,4 +120,4 @@ function buildFooter() {
     return footer;
 }
 
-export { buildPage };
+export { buildPage, buildBoards };
