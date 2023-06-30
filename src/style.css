@@ -4,5 +4,60 @@
 }
 
 #mainElement {
-    color: darkred;
+    display: grid;
+    height: 100vh;
+    grid-template-rows: 60px 2fr 60px;
+}
+
+/* HEADER */
+#header {
+    background-color: red;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+#logo {
+    background-color: blueviolet;
+    min-width: fit-content;
+    width: 200px;
+    height: 40px;
+    margin-left: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* CONTENT */
+#content {
+    background-color: green;
+    display: flex;
+}
+
+#leftPanel {
+    background-color: aquamarine;
+    flex: 1;
+}
+
+#boardsPanel {
+    background-color: brown;
+    flex: 4;
+}
+
+
+/* FOOTER */
+#footer {
+    background-color: blue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#mainButton {
+    min-width: fit-content;
+    width: 175px;
+    height: 40px;
+    max-height: 90%;
 }
