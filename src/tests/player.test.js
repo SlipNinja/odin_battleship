@@ -2,7 +2,7 @@ import { Player } from "../player";
 import { Gameboard } from "../gameboard";
 import { Ship } from "../ship";
 
-const player = new Player(true);
+const player = new Player("Bob");
 
 const board = new Gameboard(5, 5);
 const ship = new Ship(2);

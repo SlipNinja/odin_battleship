@@ -1,8 +1,7 @@
 
 class Player {
-    constructor(name, isBot = false){
+    constructor(name){
         this.name = name;
-        this.isBot = true;
     }
 
     // Returns one random possible move

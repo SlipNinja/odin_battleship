@@ -104,21 +104,6 @@ function buildBoard(sizeX, sizeY) {
     return newBoard;
 }
 
-// For each box in enemy board, add click listener
-function addBoxesEvents(board) {
-    const enemyBoard = document.getElementById("enemyBoard");
-    
-    for (const newBox of enemyBoard.children) {
-        newBox.addEventListener('click', (e) => {
-            const positionClicked = { x: e.originalTarget.dataset.x, y: e.originalTarget.dataset.y };
-            e.originalTarget.dataset.hit = true;
-            board.receiveAttack(positionClicked);
-            drawShips(board, enemyBoard, true);
-            drawHits(board, enemyBoard);
-        });
-    }
-}
-
 function buildFooter() {
     const footer = document.createElement("div");
     footer.id = "footer";
@@ -132,4 +117,4 @@ function buildFooter() {
     return footer;
 }
 
-export { buildPage, buildBoards, addBoxesEvents };
+export { buildPage, buildBoards };
