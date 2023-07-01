@@ -149,6 +149,26 @@ class Gameboard{
         }
         return false;
     }
+
+    randomlyPlaceShips(ships){
+        for (let i = 0; i < ships.length; i++) {
+            
+            const ship = ships[i];
+            const currentShips = this.ships.length;
+
+            while (currentShips !== (this.ships.length-1)) {
+                const randX = this.getRandomInt(this.width);
+                const randY = this.getRandomInt(this.height);
+                const position = {x: randX, y: randY};
+                const rotated = (Math.random() < 0.5);
+                this.addShip(ship, position, rotated);
+            }
+        }
+    }
+
+    getRandomInt(max){
+        return Math.floor(Math.random()*max);
+    }
 }
 
 export { Gameboard };
