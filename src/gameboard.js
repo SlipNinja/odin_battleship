@@ -87,14 +87,14 @@ class Gameboard{
 
     // Compute all position for future ship
     computePos(initialPos, length, rotated){
-        const allPos = [initialPos];
-        for (let i = 0; i < length-1; i++) {
+        const allPos = [];
+        for (let i = 0; i < length; i++) {
             let newpos = null;
 
             if(rotated){
-                newpos = {x: initialPos.x, y: initialPos.y + 1};
+                newpos = {x: initialPos.x, y: initialPos.y + i};
             } else {
-                newpos = {x: initialPos.x + 1, y: initialPos.y};
+                newpos = {x: initialPos.x + i, y: initialPos.y};
             }
             allPos.push(newpos);
         }
@@ -119,7 +119,9 @@ class Gameboard{
     isShipHit = (ship, pos) => {
         let shipHit = false;
         ship.pos.forEach(p => {
-            if((p.x === pos.x) && p.y === pos.y) shipHit = true;
+            if((p.x == pos.x) && (p.y == pos.y)) {
+                shipHit = true;
+            }
         });
         return shipHit;
     }
@@ -131,6 +133,21 @@ class Gameboard{
             if(!shipData.object.isSunk()) alive.push(shipData);
         });
         return alive;
+    }
+
+    getHitAt(pos){
+        return this.hits[pos.x][pos.y];
+    }
+
+    // Returns ship at given pos or false
+    getShip(pos){
+        for (let i = 0; i < this.ships.length; i++) {
+            for (let j = 0; j < this.ships[i].pos.length; j++) {
+                const curpos = this.ships[i].pos[j];
+                if(JSON.stringify(pos) === JSON.stringify(curpos)) return this.ships[i];
+            }
+        }
+        return false;
     }
 }
 

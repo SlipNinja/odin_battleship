@@ -1,11 +1,9 @@
+import { drawHits, drawShips } from "./drawBoard";
 
 function buildPage(boardSizeX, boardSizeY) {
     // Build
     buildMainElement();
     buildBoards(boardSizeX, boardSizeY);
-
-    // Adds events
-
 }
 
 function buildMainElement() {
@@ -98,13 +96,27 @@ function buildBoard(sizeX, sizeY) {
             const newBox = document.createElement("div");
             newBox.dataset.x = x;
             newBox.dataset.y = y;
+            newBox.dataset.hit = false;
             newBox.classList.add("box");
             newBoard.append(newBox);
         }
     }
-
-    //console.log(sizeX, sizeY, width);
     return newBoard;
+}
+
+// For each box in enemy board, add click listener
+function addBoxesEvents(board) {
+    const enemyBoard = document.getElementById("enemyBoard");
+    
+    for (const newBox of enemyBoard.children) {
+        newBox.addEventListener('click', (e) => {
+            const positionClicked = { x: e.originalTarget.dataset.x, y: e.originalTarget.dataset.y };
+            e.originalTarget.dataset.hit = true;
+            board.receiveAttack(positionClicked);
+            drawShips(board, enemyBoard, true);
+            drawHits(board, enemyBoard);
+        });
+    }
 }
 
 function buildFooter() {
@@ -120,4 +132,4 @@ function buildFooter() {
     return footer;
 }
 
-export { buildPage, buildBoards };
+export { buildPage, buildBoards, addBoxesEvents };
