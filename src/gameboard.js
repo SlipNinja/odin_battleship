@@ -111,8 +111,6 @@ class Gameboard{
             }
         });
 
-        console.log(this.hits);
-
         // 1 is ship touched, 2 is missed shot
         this.hits[pos.x][pos.y] = shipHit ? 1 : 2;
     }
