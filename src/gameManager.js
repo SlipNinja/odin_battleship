@@ -17,6 +17,7 @@ class GameManager{
         this.actualEnemyBoard = document.getElementById("enemyBoard");
     }
 
+    // Bot tries to play a move
     botPlays = () => {
         const randomMove = this.bot.getRandomMove(this.pBoard);
         this.bot.makeMove(this.pBoard, randomMove);
@@ -24,7 +25,12 @@ class GameManager{
         return true;
     }
 
+    // Called when the player plays
     playerPlayed = (e) => {
+
+        if(this.gameOver) return;
+
+        // Player's turn
         const box = e.target;
         if(box.dataset.hit === "true") return;
 
@@ -33,29 +39,30 @@ class GameManager{
         this.bBoard.receiveAttack(positionClicked);
 
         this.drawGame();
-
-        if(this.gameOver){
-            console.log(`The winner is ${this.winner.name} !`);
-            return;
-        }
     
-        // Test if player wins
+        // If player wins
         if(this.bBoard.shipsAlive().length <= 0){
             this.gameOver = true;
             this.winner = this.player;
+
+        // If not then it's bot's turn
+        } else {
+            // Bot plays with a short delay
+            let botFinished = false;
+            botFinished = setTimeout(this.botPlays, 400);
+            while(!botFinished){};// Wait for the bot move
+
+            // Test if bot wins
+            if(this.pBoard.shipsAlive().length <= 0){
+                this.gameOver = true;
+                this.winner = this.bot;
+            }
         }
-
-        this.drawGame();
-    
-        // Bot plays
-        let botFinished = false;
-        botFinished = setTimeout(this.botPlays, 400);
-        while(!botFinished){};
-
-        // Test if bot wins
-        if(this.pBoard.shipsAlive().length <= 0){
-            this.gameOver = true;
-            this.winner = this.bot;
+        
+        // Check if game is over
+        if(this.gameOver){
+            console.log(`The winner is ${this.winner.name} !`);
+            return;
         }
     };
 
@@ -65,11 +72,13 @@ class GameManager{
     }
 
     setupGame() {
+        // Initialize game variables
         this.gameOver = false;
         this.winner = null;
         this.pBoard = new Gameboard(this.sizeX, this.sizeY);
         this.bBoard = new Gameboard(this.sizeX, this.sizeY);
 
+        // Initialize boards with random ship placement
         const shipArray = [
             new Ship(5),
             new Ship(4),
@@ -92,6 +101,8 @@ class GameManager{
 
         this.bBoard.randomlyPlaceShips(shipArray);
         this.pBoard.randomlyPlaceShips(shipArray2);
+
+        // Add boxes events for taking turn
         for (const newBox of this.actualEnemyBoard.children) {
             newBox.addEventListener('click', this.playerPlayed);
         }
