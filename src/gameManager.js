@@ -9,12 +9,12 @@ class GameManager{
         this.winner = null;
         this.player = player;
         this.bot = bot;
-        this.pBoard = null;
-        this.bBoard = null;
+        this.pBoard = new Gameboard(this.sizeX, this.sizeY);
+        this.bBoard = new Gameboard(this.sizeX, this.sizeY);
         this.sizeX = sizeX;
         this.sizeY = sizeY;
-        this.actualPlayerBoard = document.getElementById("playerBoard");
-        this.actualEnemyBoard = document.getElementById("enemyBoard");
+        this.actualPlayerBoard = null;
+        this.actualEnemyBoard = null;
     }
 
     // Bot tries to play a move
@@ -75,8 +75,9 @@ class GameManager{
         // Initialize game variables
         this.gameOver = false;
         this.winner = null;
-        this.pBoard = new Gameboard(this.sizeX, this.sizeY);
-        this.bBoard = new Gameboard(this.sizeX, this.sizeY);
+        this.bBoard.reset();
+        this.actualPlayerBoard = document.getElementById("playerBoard");
+        this.actualEnemyBoard = document.getElementById("enemyBoard");
 
         // Initialize boards with random ship placement
         const shipArray = [
@@ -89,18 +90,7 @@ class GameManager{
             new Ship(1)
         ];
 
-        const shipArray2 = [
-            new Ship(5),
-            new Ship(4),
-            new Ship(3),
-            new Ship(3),
-            new Ship(2),
-            new Ship(2),
-            new Ship(1)
-        ];
-
         this.bBoard.randomlyPlaceShips(shipArray);
-        this.pBoard.randomlyPlaceShips(shipArray2);
 
         // Add boxes events for taking turn
         for (const newBox of this.actualEnemyBoard.children) {

@@ -8,9 +8,9 @@ function drawShips(board, actualBoard, hidden = false){
             const box = actualBoard.children[pos.y*board.width + pos.x];
 
             if(!hidden || (box.dataset.hit == "true")){
-                box.classList = "box ship";
+                box.classList.add("ship");
             } else {
-                box.classList = "box";
+                box.classList.remove("ship");
             }
         }
     }

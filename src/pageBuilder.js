@@ -1,6 +1,11 @@
+import { Ship } from "./ship";
 import { drawHits, drawShips } from "./drawBoard";
 
-function buildPage(boardSizeX, boardSizeY) {
+let GAME_MANAGER = null;
+
+function buildPage(boardSizeX, boardSizeY, manager) {
+
+    GAME_MANAGER = manager;
     // Build
     buildMainElement();
     buildBoards(boardSizeX, boardSizeY);
@@ -150,6 +155,25 @@ function tryPlacingBoat(e) {
     hightlight(gameboard, data, true);
 
     // TODO : Actually try and place boat
+    const playerBoard = GAME_MANAGER.pBoard;
+    const currentShipNumber = playerBoard.ships.length;
+    const shipSize = +e.dataTransfer.getData("text/plain");
+    
+    const newShip = new Ship(shipSize);
+    playerBoard.addShip(newShip, {x: +data.x, y: +data.y});
+
+    if(currentShipNumber < playerBoard.ships.length){
+        //Remove ship from ship list
+        const boatPanel = document.getElementById("leftPanel");
+        for (const child of boatPanel.children) {
+            if( child.children.length == shipSize ){
+                child.remove();
+                break;
+            }
+        }
+    }
+
+    drawShips(playerBoard, gameboard);
 }
 
 function allowDrop(e) {
@@ -205,10 +229,15 @@ function buildFooter() {
     const mainButton = document.createElement("button");
     mainButton.id = "mainButton";
     mainButton.innerHTML = "Start game";
+    mainButton.onclick = startButtonClicked;
 
     footer.appendChild(mainButton);
 
     return footer;
+}
+
+function startButtonClicked(e){
+    GAME_MANAGER.newGame();
 }
 
 export { buildPage, buildBoards };

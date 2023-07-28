@@ -18,6 +18,11 @@ class Gameboard{
         this.hits = Array.from({length: height}, e => Array(width).fill(0));
     }
 
+    reset(){
+        this.ships = [];
+        this.hits = Array.from({length: this.height}, e => Array(this.width).fill(0));
+    }
+
     // Adds ship at pos, rotated means vertically instead of horizontally
     addShip(ship, pos, rotated = false){
         const newShipData = {

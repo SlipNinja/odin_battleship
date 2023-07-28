@@ -7,11 +7,9 @@ import { GameManager } from './gameManager';
 const BOARD_SIZE_X = 10; 
 const BOARD_SIZE_Y = 10;
 
-buildPage(BOARD_SIZE_X, BOARD_SIZE_Y);
-
 const player = new Player("Bobby");
 const bot = new Player("Evil bot");
 
-
 const manager = new GameManager(player, bot, BOARD_SIZE_X, BOARD_SIZE_Y);
-manager.newGame();
+
+buildPage(BOARD_SIZE_X, BOARD_SIZE_Y, manager);
