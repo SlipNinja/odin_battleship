@@ -39,7 +39,7 @@
 }
 
 #leftPanel {
-    background-color: aquamarine;
+    background-color: rgb(127, 202, 255);
     flex: 4;
     display: flex;
     flex-direction: column;
@@ -86,7 +86,7 @@
 }
 
 .displaybox {
-    background-color: rgb(50, 100, 250);
+    background-color: rgb(34, 168, 136);
     border: 1px solid rgb(0, 50, 50);
 
     aspect-ratio: 1 / 1;
@@ -105,6 +105,12 @@
 
 .box:active:not(.ship):not(.playerside)[data-hit="false"] {
     background-color: rgb(30, 60, 150);
+}
+
+.highlightbox:not(.ship) {
+    box-shadow: 0px 0px 20px red;
+    z-index: 1;
+    background-color: rgb(40, 80, 200);
 }
 
 .ship {

@@ -97,6 +97,8 @@ function buildBoard(sizeX, sizeY, player = false) {
             const newBox = document.createElement("div");
             newBox.ondrop = tryPlacingBoat;
             newBox.ondragover = allowDrop;
+            newBox.ondragenter = highlightDropPoint;
+            newBox.ondragleave = unHighlightDropPoint;
             newBox.dataset.x = x;
             newBox.dataset.y = y;
             newBox.dataset.hit = false;
@@ -110,11 +112,39 @@ function buildBoard(sizeX, sizeY, player = false) {
     return newBoard;
 }
 
+function highlightDropPoint(e) {
+    e.preventDefault();
+    const data = e.target.dataset;
+
+    const gameboard = document.getElementById("playerBoard");
+    const curIndex = +data.x + ( data.y * 10 );
+    const curBox = gameboard.children[curIndex];
+
+    curBox.classList.add("highlightbox");
+}
+
+function unHighlightDropPoint(e) {
+    e.preventDefault();
+    const data = e.target.dataset;
+
+    const gameboard = document.getElementById("playerBoard");
+    const curIndex = +data.x + ( data.y * 10 );
+    const curBox = gameboard.children[curIndex];
+
+    curBox.classList.remove("highlightbox");
+}
+
 function tryPlacingBoat(e) {
     e.preventDefault();
-    console.log("COUCOU");
     const data = e.target.dataset;
-    console.log(data.x, data.y);
+    
+    const gameboard = document.getElementById("playerBoard");
+    const curIndex = +data.x + ( data.y * 10 );
+    const curBox = gameboard.children[curIndex];
+
+    curBox.classList.remove("highlightbox");
+
+    // TODO : Actually try and place boat
 }
 
 function allowDrop(e) {
