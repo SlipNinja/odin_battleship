@@ -75,7 +75,7 @@
     border: 2px solid rgb(0, 50, 50);
 }
 
-.box {
+.box, .enemyBox {
     background-color: rgb(50, 100, 250);
     border: 1px solid rgb(0, 50, 50);
     aspect-ratio: 1 / 1;
@@ -96,14 +96,14 @@
     display: flex;
 }
 
-.box:hover:not(.ship)[data-hit="false"] {
+.enemyBox:hover:not(.ship)[data-hit="false"] {
     box-shadow: 0px 0px 20px red;
     z-index: 1;
     background-color: rgb(40, 80, 200);
     cursor: default;
 }
 
-.box:active:not(.ship)[data-hit="false"] {
+.enemyBox:active:not(.ship)[data-hit="false"] {
     background-color: rgb(30, 60, 150);
 }
 

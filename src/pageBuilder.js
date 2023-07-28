@@ -98,12 +98,15 @@ function buildBoard(sizeX, sizeY, player = false) {
             newBox.dataset.x = x;
             newBox.dataset.y = y;
             newBox.dataset.hit = false;
-            newBox.classList.add("box");
+            
             if(player){
+                newBox.classList.add("box");
                 newBox.ondrop = tryPlacingBoat;
                 newBox.ondragover = allowDrop;
                 newBox.ondragenter = highlightDropPoint;
                 newBox.ondragleave = unHighlightDropPoint;
+            } else {
+                newBox.classList.add("enemyBox");
             }
             newBoard.append(newBox);
         }
@@ -142,12 +145,9 @@ function unHighlightDropPoint(e) {
 function tryPlacingBoat(e) {
     e.preventDefault();
     const data = e.target.dataset;
-    
     const gameboard = document.getElementById("playerBoard");
-    const curIndex = +data.x + ( data.y * 10 );
-    const curBox = gameboard.children[curIndex];
-
-    curBox.classList.remove("highlightbox");
+    
+    hightlight(gameboard, data, true);
 
     // TODO : Actually try and place boat
 }
