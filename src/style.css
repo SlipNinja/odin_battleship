@@ -96,14 +96,14 @@
     display: flex;
 }
 
-.box:hover:not(.ship):not(.playerside)[data-hit="false"] {
+.box:hover:not(.ship)[data-hit="false"] {
     box-shadow: 0px 0px 20px red;
     z-index: 1;
     background-color: rgb(40, 80, 200);
     cursor: default;
 }
 
-.box:active:not(.ship):not(.playerside)[data-hit="false"] {
+.box:active:not(.ship)[data-hit="false"] {
     background-color: rgb(30, 60, 150);
 }
 

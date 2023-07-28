@@ -95,16 +95,15 @@ function buildBoard(sizeX, sizeY, player = false) {
     for (let y = 0; y < sizeY; y++) {
         for (let x = 0; x < sizeX; x++) {
             const newBox = document.createElement("div");
-            newBox.ondrop = tryPlacingBoat;
-            newBox.ondragover = allowDrop;
-            newBox.ondragenter = highlightDropPoint;
-            newBox.ondragleave = unHighlightDropPoint;
             newBox.dataset.x = x;
             newBox.dataset.y = y;
             newBox.dataset.hit = false;
             newBox.classList.add("box");
             if(player){
-                newBox.classList.add("playerside");
+                newBox.ondrop = tryPlacingBoat;
+                newBox.ondragover = allowDrop;
+                newBox.ondragenter = highlightDropPoint;
+                newBox.ondragleave = unHighlightDropPoint;
             }
             newBoard.append(newBox);
         }
@@ -112,26 +111,32 @@ function buildBoard(sizeX, sizeY, player = false) {
     return newBoard;
 }
 
-function highlightDropPoint(e) {
-    e.preventDefault();
-    const data = e.target.dataset;
+function hightlight(gameboard, data, reverse = false) {
 
-    const gameboard = document.getElementById("playerBoard");
     const curIndex = +data.x + ( data.y * 10 );
     const curBox = gameboard.children[curIndex];
 
-    curBox.classList.add("highlightbox");
+    if(reverse) {
+        curBox.classList.remove("highlightbox");
+    } else {
+        curBox.classList.add("highlightbox");
+    }
+}
+
+function highlightDropPoint(e) {
+    e.preventDefault();
+    const data = e.target.dataset;
+    const gameboard = document.getElementById("playerBoard");
+    
+    hightlight(gameboard, data);
 }
 
 function unHighlightDropPoint(e) {
     e.preventDefault();
     const data = e.target.dataset;
-
     const gameboard = document.getElementById("playerBoard");
-    const curIndex = +data.x + ( data.y * 10 );
-    const curBox = gameboard.children[curIndex];
-
-    curBox.classList.remove("highlightbox");
+    
+    hightlight(gameboard, data, true);
 }
 
 function tryPlacingBoat(e) {
