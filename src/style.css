@@ -40,12 +40,17 @@
 
 #leftPanel {
     background-color: aquamarine;
-    flex: 1;
+    flex: 4;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 5vh;
+    padding-left: 3vh;
 }
 
 #boardsPanel {
     background-color: brown;
-    flex: 4;
+    flex: 13;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -80,20 +85,32 @@
     font-size: 2.5vw;
 }
 
-.box:hover:not(.ship) {
+.displaybox {
+    background-color: rgb(50, 100, 250);
+    border: 1px solid rgb(0, 50, 50);
+
+    aspect-ratio: 1 / 1;
+}
+
+.boat {
+    display: flex;
+}
+
+.box:hover:not(.ship):not(.playerside)[data-hit="false"] {
     box-shadow: 0px 0px 20px red;
     z-index: 1;
     background-color: rgb(40, 80, 200);
     cursor: default;
 }
 
-.box:active {
+.box:active:not(.ship):not(.playerside)[data-hit="false"] {
     background-color: rgb(30, 60, 150);
 }
 
 .ship {
     background-color: rgb(40, 50, 60);
 }
+
 
 
 
