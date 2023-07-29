@@ -4,12 +4,12 @@
 }
 
 @font-face {
-    font-family: 'monster';
-    src: url('./fonts/horror_monster.ttf');
+    font-family: 'bebas';
+    src: url('./fonts/bebas.ttf');
 }
 
 #header, #leftPanel, #footer, #leftText, #rightText, button{
-    font-family: 'monster';
+    font-family: 'bebas';
 }
 
 #mainElement {
@@ -39,11 +39,12 @@
 #logo {
     margin-left: 20px;
     padding-left: 10px;
-    font-size: 1.5em;
+    font-size: 2rem;
 }
 
 #logoText {
     width: 200px;
+    font-size: 2.4rem;
 }
 
 /* CONTENT */
@@ -58,18 +59,18 @@
     flex: 4;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 20px;
     align-items: center;
-    padding-top: 5vh;
+    padding-top: 2.3vh;
 }
 
 #logsText, #logs, #newGameButton {
     width: 90%;
-    align-self: center;
 }
 
 #logsText {
-
+    text-align: center;
+    font-size: 1.5rem;
 }
 
 #logs {
@@ -78,30 +79,40 @@
     flex-direction: column;
     overflow: auto;
     background-color: rgb(41, 60, 107);
-    height: 80%;
+    height: 60vh;
+    max-height: 60vh;
     border: 2mm ridge rgba(27, 40, 76, 0.6);
     color: white;
-    font-size: .9em;
+    font-size: 1.1rem;
+    gap: 10px;
+}
+
+#logs > .gold {
+    color: gold;
 }
 
 .logLine {
-    margin-top: 20px;
     margin-left: 10px;
 }
 
-#newGameButton {
+button {
     height: 5%;
-    background-color: rgb(57, 176, 136);
+    background-color: rgb(42, 97, 66);
     border: none;
     border-radius: 10px;
+    font-size: 1.5rem;
+}
+
+button:not(.disabled){
+    background-color: rgb(57, 176, 136);
     box-shadow: 0px 0px 5px rgb(16, 3, 109);
 }
 
-#newGameButton:hover {
+button:hover:not(.disabled) {
     box-shadow: 0px 0px 12px rgb(16, 3, 109);
 }
 
-#newGameButton:active {
+button:active:not(.disabled) {
     box-shadow: none;
     background-color: rgb(36, 107, 83);
 }
@@ -124,7 +135,8 @@
 
 #leftText, #rightText {
     justify-self: center;
-    padding-top: 10px;
+    padding-top: 3vh;
+    font-size: 2rem;
 }
 
 #playerBoard, #enemyBoard {
@@ -151,6 +163,11 @@
 
 .boat {
     display: flex;
+}
+
+#dragText {
+    font-size: 1.3rem;
+    padding-top: 20px;
 }
 
 .enemyBox:hover[data-hit="false"]:not(.disabled) {

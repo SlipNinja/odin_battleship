@@ -15,14 +15,22 @@ class GameManager{
         this.sizeY = 10;
         this.actualPlayerBoard = null;
         this.actualEnemyBoard = null;
+        this.logs = null;
         //this.sizeList = [5, 4, 3, 3, 2, 2, 1];
         this.sizeList = [ 5 ];
     }
 
     // Bot tries to play a move
     botPlays = () => {
+        const shipsAliveBeforeHit = this.bBoard.shipsAlive().length;
         const randomMove = this.bot.getRandomMove(this.pBoard);
+
+        // Actual move
         this.bot.makeMove(this.pBoard, randomMove);
+
+        const shipSunk = shipsAliveBeforeHit > this.bBoard.shipsAlive().length;
+        this.logFromHit(this.bot, this.pBoard, randomMove.x, randomMove.y, shipSunk);
+
         this.drawGame();
         return true;
     }
@@ -36,9 +44,15 @@ class GameManager{
         const box = e.target;
         if(box.dataset.hit === "true") return;
 
+        const shipsAliveBeforeHit = this.bBoard.shipsAlive().length;
         const positionClicked = { x: box.dataset.x, y: box.dataset.y };
         box.dataset.hit = true;
         this.bBoard.receiveAttack(positionClicked);
+
+        const shipSunk = shipsAliveBeforeHit > this.bBoard.shipsAlive().length;
+        this.logFromHit(this.player, this.bBoard, box.dataset.x, box.dataset.y, shipSunk);
+
+        // TODO : Grey out sunk ships
 
         this.drawGame();
     
@@ -63,10 +77,42 @@ class GameManager{
         
         // Check if game is over
         if(this.gameOver){
-            console.log(`The winner is ${this.winner.name} !`);
+            this.log(`The winner is ${this.winner.name} !`, true);
             return;
         }
     };
+
+    logFromHit(player, board, posX, posY, sunk){
+        const hitResult = board.hits[posX][posY];
+        let resultText = "";
+        let gold = false;
+
+        if(sunk){
+            resultText = "and sunk an opposite ship !";
+            gold = true;
+        } else {
+            if(hitResult == "2"){// 2 is miss, 1 is hit
+                resultText = "and misses..";
+            } else {
+                resultText = "and hit a ship !"
+                gold = true;
+            }
+        }
+
+        const text = `${player.name} fires at position [${posX+1};${posY+1}] ${resultText}`;
+        this.log(text, gold);
+    }
+
+    log(text, gold = false){
+        if(this.logs == null) this.logs = document.getElementById("logs");
+
+        const newLog = document.createElement("p");
+        newLog.innerHTML = text;
+        newLog.classList.add("logLine");
+        if(gold) newLog.classList.add("gold");
+        this.logs.appendChild(newLog);
+        this.logs.scrollTop = this.logs.scrollHeight;
+    }
 
     restartGame(){
         console.log(this);

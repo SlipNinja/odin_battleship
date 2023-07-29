@@ -12,6 +12,7 @@ function buildPage(manager = null) {
     buildBoards(GAME_MANAGER.sizeX, GAME_MANAGER.sizeY);
     fillLeftPanelWithBoats(GAME_MANAGER.sizeList);
     enableBoard(document.getElementById("enemyBoard"), false);
+    enableButton(false);
 }
 
 function buildMainElement() {
@@ -237,13 +238,20 @@ function fillLeftPanelWithBoats(sizeList) {
 
     const dragText = document.createElement("div");
     dragText.id = "dragText";
-    dragText.innerHTML = "Please drag your ships to legal positions";
+    dragText.innerHTML = "Please drag your ships to legal positions<br/>Use right click to rotate a ship";
     leftPanel.appendChild(dragText);
 }
 
 function enableButton(enable = true) {
     const startbtn = document.getElementById("mainButton");
     startbtn.disabled = !enable;
+
+    if(enable){
+        startbtn.classList.remove("disabled");
+    } else {
+        startbtn.classList.add("disabled");
+    }
+    
 }
 
 function enableBoard(board, enable = true) {
@@ -276,7 +284,6 @@ function buildFooter() {
     mainButton.id = "mainButton";
     mainButton.innerHTML = "Start game";
     mainButton.onclick = startButtonClicked;
-    mainButton.disabled = true;
 
     footer.appendChild(mainButton);
 
@@ -314,20 +321,6 @@ function showLogs() {
 
     const logs = document.createElement("div");
     logs.id = "logs";
-
-    const line1 = document.createElement("p");
-    line1.innerHTML = "Blabla";
-    const line2 = document.createElement("p");
-    line2.innerHTML = "Blablabla";
-    const line3 = document.createElement("p");
-    line3.innerHTML = "Blabla";
-    line1.classList.add("logLine");
-    line2.classList.add("logLine");
-    line3.classList.add("logLine");
-
-    logs.appendChild(line1);
-    logs.appendChild(line2);
-    logs.appendChild(line3);
 
     const newGameButton = document.createElement("button");
     newGameButton.id = "newGameButton";
