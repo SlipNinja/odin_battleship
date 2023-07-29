@@ -16,6 +16,7 @@ class GameManager{
         this.actualPlayerBoard = null;
         this.actualEnemyBoard = null;
         this.logs = null;
+        this.botFinished = true;
         //this.sizeList = [5, 4, 3, 3, 2, 2, 1];
         this.sizeList = [ 5 ];
     }
@@ -39,20 +40,25 @@ class GameManager{
     playerPlayed = (e) => {
 
         if(this.gameOver) return;
+        if(this.botFinished == false) console.log("ITS FALSE !");
+        if(this.botFinished == false) return;
 
         // Player's turn
         const box = e.target;
         if(box.dataset.hit === "true") return;
 
         const shipsAliveBeforeHit = this.bBoard.shipsAlive().length;
-        const positionClicked = { x: box.dataset.x, y: box.dataset.y };
+        const positionClicked = { x: +box.dataset.x, y: +box.dataset.y };
         box.dataset.hit = true;
         this.bBoard.receiveAttack(positionClicked);
 
         const shipSunk = shipsAliveBeforeHit > this.bBoard.shipsAlive().length;
         this.logFromHit(this.player, this.bBoard, box.dataset.x, box.dataset.y, shipSunk);
 
-        // TODO : Grey out sunk ships
+        if(shipSunk){
+            const shipHit = this.bBoard.getShip(positionClicked);
+            this.sunkShip(shipHit, this.bBoard, this.actualEnemyBoard);
+        }
 
         this.drawGame();
     
@@ -64,9 +70,9 @@ class GameManager{
         // If not then it's bot's turn
         } else {
             // Bot plays with a short delay
-            let botFinished = false;
-            botFinished = setTimeout(this.botPlays, 400);
-            while(!botFinished){};// Wait for the bot move
+            this.botFinished = false;
+            this.botFinished = setTimeout(this.botPlays, 400);
+            while(!this.botFinished){};// Wait for the bot move
 
             // Test if bot wins
             if(this.pBoard.shipsAlive().length <= 0){
@@ -81,6 +87,13 @@ class GameManager{
             return;
         }
     };
+
+    sunkShip(ship, board, actualBoard) {
+        for (const pos of ship.pos) {
+            const curBox = actualBoard.children[pos.y*board.width + pos.x];
+            curBox.classList.add("dead");
+        }
+    }
 
     logFromHit(player, board, posX, posY, sunk){
         const hitResult = board.hits[posX][posY];
@@ -115,7 +128,6 @@ class GameManager{
     }
 
     restartGame(){
-        console.log(this);
         const mainElement = document.getElementById("mainElement");
         
         this.pBoard.reset();

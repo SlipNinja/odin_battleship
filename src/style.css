@@ -155,6 +155,10 @@ button:active:not(.disabled) {
     font-size: 2.1vw;
 }
 
+.ship.dead {
+    background-color: rgb(192, 8, 57);
+}
+
 .displaybox {
     background-color: rgb(34, 168, 136);
     border: 1px solid rgb(0, 50, 50);

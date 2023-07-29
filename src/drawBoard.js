@@ -2,7 +2,6 @@
 function drawShips(board, actualBoard, hidden = false){
     for (let i = 0; i < board.ships.length; i++) {
         const shipData = board.ships[i];
-        console.log(shipData.pos);
 
         for (let j = 0; j < shipData.pos.length; j++) {
             const pos = shipData.pos[j];
@@ -12,7 +11,6 @@ function drawShips(board, actualBoard, hidden = false){
                 box.classList.add("ship");
             } else {
                 box.classList.remove("ship");
-                console.log("REMOVED SHIP : ", box.classList);
             }
         }
     }
