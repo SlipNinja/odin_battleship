@@ -124,6 +124,9 @@ function hightlight(gameboard, data, reverse = false) {
 
     const curIndex = +data.x + ( data.y * 10 );
     const curBox = gameboard.children[curIndex];
+    console.log("Highlight box :");
+    console.log(!reverse, curBox);
+    console.log("Following box : ", gameboard.children[curIndex+1]);
 
     if(reverse) {
         curBox.classList.remove("highlightbox");
@@ -136,6 +139,8 @@ function highlightDropPoint(e) {
     e.preventDefault();
     const data = e.target.dataset;
     const gameboard = document.getElementById("playerBoard");
+
+    console.log("Box entered :", e.target);
     
     hightlight(gameboard, data);
 }
@@ -220,7 +225,7 @@ function fillLeftPanelWithBoats(sizeList) {
 
 function enableButton(enable = true) {
     const startbtn = document.getElementById("mainButton");
-    startbtn.disabled = false;
+    startbtn.disabled = !enable;
 }
 
 function enableBoard(board, enable = true) {
@@ -265,6 +270,8 @@ function buildFooter() {
 function startButtonClicked(e){
     GAME_MANAGER.newGame();
     enableButton(false);
+    
+    //TODO : Bring logs
 }
 
 export { buildPage, buildBoards };
