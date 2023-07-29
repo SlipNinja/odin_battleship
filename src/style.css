@@ -96,14 +96,14 @@
     display: flex;
 }
 
-.enemyBox:hover[data-hit="false"] {
+.enemyBox:hover[data-hit="false"]:not(.disabled) {
     box-shadow: 0px 0px 20px red;
     z-index: 1;
     background-color: rgb(40, 80, 200);
     cursor: default;
 }
 
-.enemyBox:active:not(.ship)[data-hit="false"] {
+.enemyBox:active:not(.ship)[data-hit="false"]:not(.disabled) {
     background-color: rgb(30, 60, 150);
 }
 

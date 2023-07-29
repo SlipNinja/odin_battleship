@@ -10,6 +10,7 @@ function buildPage(boardSizeX, boardSizeY, manager) {
     buildMainElement();
     buildBoards(boardSizeX, boardSizeY);
     fillLeftPanelWithBoats([5, 4, 3, 3, 2, 2, 1]);
+    enableBoard(document.getElementById("enemyBoard"), false);
 }
 
 function buildMainElement() {
@@ -154,7 +155,6 @@ function tryPlacingBoat(e) {
     
     hightlight(gameboard, data, true);
 
-    // TODO : Actually try and place boat
     const playerBoard = GAME_MANAGER.pBoard;
     const currentShipNumber = playerBoard.ships.length;
     const shipSize = +e.dataTransfer.getData("text/plain");
@@ -170,6 +170,12 @@ function tryPlacingBoat(e) {
                 child.remove();
                 break;
             }
+        }
+
+        if(boatPanel.children.length <= 1){
+            // Allow game start
+            enableButton();
+            enableBoard(document.getElementById("enemyBoard"));
         }
     }
 
@@ -212,6 +218,25 @@ function fillLeftPanelWithBoats(sizeList) {
     leftPanel.appendChild(dragText);
 }
 
+function enableButton(enable = true) {
+    const startbtn = document.getElementById("mainButton");
+    startbtn.disabled = false;
+}
+
+function enableBoard(board, enable = true) {
+    for (const box of board.children) {
+        console.log(box);
+        box.disabled = !enable;
+
+        if(enable){
+            box.classList.remove("disabled");
+        } else {
+            box.classList.add("disabled");
+        }
+        
+    }
+}
+
 function fillLeftPanelWithLogs() {
     const leftPanel = document.getElementById("leftPanel");
     clearElementChildren(leftPanel);
@@ -230,6 +255,7 @@ function buildFooter() {
     mainButton.id = "mainButton";
     mainButton.innerHTML = "Start game";
     mainButton.onclick = startButtonClicked;
+    mainButton.disabled = true;
 
     footer.appendChild(mainButton);
 
@@ -238,6 +264,7 @@ function buildFooter() {
 
 function startButtonClicked(e){
     GAME_MANAGER.newGame();
+    enableButton(false);
 }
 
 export { buildPage, buildBoards };
