@@ -322,12 +322,12 @@ ___CSS_LOADER_EXPORT___.push([module.id, `* {
 }
 
 @font-face {
-    font-family: 'monster';
+    font-family: 'bebas';
     src: url(${___CSS_LOADER_URL_REPLACEMENT_0___});
 }
 
 #header, #leftPanel, #footer, #leftText, #rightText, button{
-    font-family: 'monster';
+    font-family: 'bebas';
 }
 
 #mainElement {
@@ -339,23 +339,30 @@ ___CSS_LOADER_EXPORT___.push([module.id, `* {
 /* HEADER */
 #header {
     flex: 0 0 6vh;
-    background-color: red;
+    background-color: rgb(15, 78, 136);
     display: flex;
     justify-content: flex-start;
+    align-items: center;
+    border-bottom: 2mm ridge rgba(27, 40, 76, 0.6);
+}
+
+#logo, #logoText {
+    min-width: fit-content;
+    height: 4vh;
+    display: flex;
+    justify-content: center;
     align-items: center;
 }
 
 #logo {
-    background-color: blueviolet;
-    min-width: fit-content;
-    width: 200px;
-    height: 4vh;
     margin-left: 20px;
     padding-left: 10px;
-    padding-right: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    font-size: 2rem;
+}
+
+#logoText {
+    width: 200px;
+    font-size: 2.4rem;
 }
 
 /* CONTENT */
@@ -372,16 +379,16 @@ ___CSS_LOADER_EXPORT___.push([module.id, `* {
     flex-direction: column;
     gap: 10px;
     align-items: center;
-    padding-top: 5vh;
+    padding-top: 2.3vh;
 }
 
 #logsText, #logs, #newGameButton {
     width: 90%;
-    align-self: center;
 }
 
 #logsText {
-
+    text-align: center;
+    font-size: 1.5rem;
 }
 
 #logs {
@@ -393,27 +400,32 @@ ___CSS_LOADER_EXPORT___.push([module.id, `* {
     height: 80%;
     border: 2mm ridge rgba(27, 40, 76, 0.6);
     color: white;
-    font-size: .9em;
+    font-size: 1rem;
 }
 
 .logLine {
-    margin-top: 20px;
+    margin-top: 15px;
     margin-left: 10px;
 }
 
-#newGameButton {
+button {
     height: 5%;
-    background-color: rgb(57, 176, 136);
+    background-color: rgb(42, 97, 66);
     border: none;
     border-radius: 10px;
+    font-size: 1.5rem;
+}
+
+button:not(.disabled){
+    background-color: rgb(57, 176, 136);
     box-shadow: 0px 0px 5px rgb(16, 3, 109);
 }
 
-#newGameButton:hover {
+button:hover:not(.disabled) {
     box-shadow: 0px 0px 12px rgb(16, 3, 109);
 }
 
-#newGameButton:active {
+button:active:not(.disabled) {
     box-shadow: none;
     background-color: rgb(36, 107, 83);
 }
@@ -436,6 +448,8 @@ ___CSS_LOADER_EXPORT___.push([module.id, `* {
 
 #leftText, #rightText {
     justify-self: center;
+    padding-top: 3vh;
+    font-size: 2rem;
 }
 
 #playerBoard, #enemyBoard {
@@ -650,7 +664,7 @@ module.exports = function (url, options) {
 /* 12 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-module.exports = __webpack_require__.p + "bc957c6f76fe168fb0bb.ttf";
+module.exports = __webpack_require__.p + "c501e16fa3f0781f9d73.ttf";
 
 /***/ }),
 /* 13 */
@@ -677,6 +691,7 @@ function buildPage(manager = null) {
     buildBoards(GAME_MANAGER.sizeX, GAME_MANAGER.sizeY);
     fillLeftPanelWithBoats(GAME_MANAGER.sizeList);
     enableBoard(document.getElementById("enemyBoard"), false);
+    enableButton(false);
 }
 
 function buildMainElement() {
@@ -702,9 +717,14 @@ function buildHeader() {
 
     const logo = document.createElement("div");
     logo.id = "logo";
-    logo.innerHTML = "&#8618 LOGO HERE";
+    logo.innerHTML = "&#9875";
+
+    const logoText = document.createElement("div");
+    logoText.id = "logoText";
+    logoText.innerHTML = "BATTLESHIP HEROES";
 
     header.appendChild(logo);
+    header.appendChild(logoText);
 
     return header;
 }
@@ -897,13 +917,20 @@ function fillLeftPanelWithBoats(sizeList) {
 
     const dragText = document.createElement("div");
     dragText.id = "dragText";
-    dragText.innerHTML = "Please drag your ships to legal positions";
+    dragText.innerHTML = "Please drag your ships to legal positions<br/>Use right click to rotate a ship";
     leftPanel.appendChild(dragText);
 }
 
 function enableButton(enable = true) {
     const startbtn = document.getElementById("mainButton");
     startbtn.disabled = !enable;
+
+    if(enable){
+        startbtn.classList.remove("disabled");
+    } else {
+        startbtn.classList.add("disabled");
+    }
+    
 }
 
 function enableBoard(board, enable = true) {
@@ -936,7 +963,6 @@ function buildFooter() {
     mainButton.id = "mainButton";
     mainButton.innerHTML = "Start game";
     mainButton.onclick = startButtonClicked;
-    mainButton.disabled = true;
 
     footer.appendChild(mainButton);
 
@@ -1077,7 +1103,7 @@ function drawHits(board, actualBoard) {
             if(hit === 1){
                 box.innerHTML = "&#128165";
             } else if(hit === 2){
-                box.innerHTML = "&#128166";
+                box.innerHTML = "&#127754";
             }
         }   
     }
