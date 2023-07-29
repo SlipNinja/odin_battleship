@@ -1,20 +1,22 @@
 import { Gameboard } from './gameboard';
-import { addBoxesEvents } from './pageBuilder';
+import { addBoxesEvents, buildPage } from './pageBuilder';
 import { drawHits, drawShips } from "./drawBoard";
 import { Ship } from './ship';
 
 class GameManager{
-    constructor(player, bot, sizeX, sizeY){
+    constructor(player, bot){
         this.gameOver = false;
         this.winner = null;
         this.player = player;
         this.bot = bot;
         this.pBoard = new Gameboard(this.sizeX, this.sizeY);
         this.bBoard = new Gameboard(this.sizeX, this.sizeY);
-        this.sizeX = sizeX;
-        this.sizeY = sizeY;
+        this.sizeX = 10;
+        this.sizeY = 10;
         this.actualPlayerBoard = null;
         this.actualEnemyBoard = null;
+        //this.sizeList = [5, 4, 3, 3, 2, 2, 1];
+        this.sizeList = [ 5 ];
     }
 
     // Bot tries to play a move
@@ -66,6 +68,19 @@ class GameManager{
         }
     };
 
+    restartGame(){
+        console.log(this);
+        const mainElement = document.getElementById("mainElement");
+        
+        this.pBoard.reset();
+        this.bBoard.reset();
+        mainElement.remove();
+
+        buildPage(this);
+
+        
+    }
+
     newGame() {
         this.setupGame();
         this.drawGame();
@@ -75,20 +90,14 @@ class GameManager{
         // Initialize game variables
         this.gameOver = false;
         this.winner = null;
-        this.bBoard.reset();
         this.actualPlayerBoard = document.getElementById("playerBoard");
         this.actualEnemyBoard = document.getElementById("enemyBoard");
 
         // Initialize boards with random ship placement
-        const shipArray = [
-            new Ship(5),
-            new Ship(4),
-            new Ship(3),
-            new Ship(3),
-            new Ship(2),
-            new Ship(2),
-            new Ship(1)
-        ];
+        const shipArray = [];
+        for (const size of this.sizeList) {
+            shipArray.push(new Ship(size));
+        }
 
         this.bBoard.randomlyPlaceShips(shipArray);
 

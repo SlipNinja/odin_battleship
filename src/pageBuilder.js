@@ -3,13 +3,14 @@ import { clearOldShip, drawShips } from "./drawBoard";
 
 let GAME_MANAGER = null;
 
-function buildPage(boardSizeX, boardSizeY, manager) {
+function buildPage(manager = null) {
 
-    GAME_MANAGER = manager;
+    if(GAME_MANAGER == null) GAME_MANAGER = manager;
+
     // Build
     buildMainElement();
-    buildBoards(boardSizeX, boardSizeY);
-    fillLeftPanelWithBoats([5, 4, 3, 3, 2, 2, 1]);
+    buildBoards(GAME_MANAGER.sizeX, GAME_MANAGER.sizeY);
+    fillLeftPanelWithBoats(GAME_MANAGER.sizeList);
     enableBoard(document.getElementById("enemyBoard"), false);
 }
 
@@ -112,7 +113,7 @@ function buildBoard(sizeX, sizeY, player = false) {
                 newBox.ondragenter = highlightDropPoint;
                 newBox.ondragleave = unHighlightDropPoint;
 
-                newBox.addEventListener('contextmenu', (e) => {
+                newBox.addEventListener('contextmenu', newBox.rightClicked = function rightClicked(e) {
                     e.preventDefault();
                     rightClickRotate({x: x, y: y});
                     return false;
@@ -249,7 +250,6 @@ function enableBoard(board, enable = true) {
         } else {
             box.classList.add("disabled");
         }
-        
     }
 }
 
@@ -281,8 +281,57 @@ function buildFooter() {
 function startButtonClicked(e){
     GAME_MANAGER.newGame();
     enableButton(false);
+
+    // Clear rotate listeners
+    clearRotateListeners();
     
     //TODO : Bring logs
+    showLogs();
+}
+
+function clearRotateListeners(){
+    const playerBoard = document.getElementById("playerBoard");
+    for (const box of playerBoard.children) {
+        box.removeEventListener('contextmenu', box.rightClicked, false);
+    }
+}
+
+function showLogs() {
+    const leftPanel = document.getElementById("leftPanel");
+
+    while (leftPanel.firstChild) {
+        leftPanel.lastChild.remove();
+    }
+
+    const logsText = document.createElement("div");
+    logsText.id = "logsText";
+    logsText.innerHTML = "Battle logs"
+
+    const logs = document.createElement("div");
+    logs.id = "logs";
+
+    const line1 = document.createElement("p");
+    line1.innerHTML = "Blabla";
+    const line2 = document.createElement("p");
+    line2.innerHTML = "Blablabla";
+    const line3 = document.createElement("p");
+    line3.innerHTML = "Blabla";
+    line1.classList.add("logLine");
+    line2.classList.add("logLine");
+    line3.classList.add("logLine");
+
+    logs.appendChild(line1);
+    logs.appendChild(line2);
+    logs.appendChild(line3);
+
+    const newGameButton = document.createElement("button");
+    newGameButton.id = "newGameButton";
+    newGameButton.innerHTML = "New game";
+    newGameButton.onclick = GAME_MANAGER.restartGame.bind(GAME_MANAGER);
+
+    leftPanel.appendChild(logsText);
+    leftPanel.appendChild(logs);
+    leftPanel.appendChild(newGameButton);
 }
 
 export { buildPage, buildBoards };

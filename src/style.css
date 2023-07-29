@@ -3,6 +3,15 @@
     padding: 0;
 }
 
+@font-face {
+    font-family: 'monster';
+    src: url('./fonts/horror_monster.ttf');
+}
+
+#header, #leftPanel, #footer, #leftText, #rightText, button{
+    font-family: 'monster';
+}
+
 #mainElement {
     display: flex;
     flex-direction: column;
@@ -39,17 +48,60 @@
 }
 
 #leftPanel {
-    background-color: rgb(127, 202, 255);
+    background-color: rgb(23, 117, 204);
     flex: 4;
     display: flex;
     flex-direction: column;
     gap: 10px;
+    align-items: center;
     padding-top: 5vh;
-    padding-left: 3vh;
+}
+
+#logsText, #logs, #newGameButton {
+    width: 90%;
+    align-self: center;
+}
+
+#logsText {
+
+}
+
+#logs {
+    padding-left: 5px;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    background-color: rgb(41, 60, 107);
+    height: 80%;
+    border: 2mm ridge rgba(27, 40, 76, 0.6);
+    color: white;
+    font-size: .9em;
+}
+
+.logLine {
+    margin-top: 20px;
+    margin-left: 10px;
+}
+
+#newGameButton {
+    height: 5%;
+    background-color: rgb(57, 176, 136);
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px rgb(16, 3, 109);
+}
+
+#newGameButton:hover {
+    box-shadow: 0px 0px 12px rgb(16, 3, 109);
+}
+
+#newGameButton:active {
+    box-shadow: none;
+    background-color: rgb(36, 107, 83);
 }
 
 #boardsPanel {
-    background-color: brown;
+    background-color: rgb(23, 117, 204);
     flex: 13;
     display: flex;
     justify-content: space-around;
@@ -58,7 +110,6 @@
 
 #leftBoard, #rightBoard {
     flex: 1;
-    background-color: pink;
     display: grid;
     grid-template-rows: 4vh 1fr;
     align-items: center;
@@ -82,13 +133,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 2.5vw;
+    font-size: 2.1vw;
 }
 
 .displaybox {
     background-color: rgb(34, 168, 136);
     border: 1px solid rgb(0, 50, 50);
-
     aspect-ratio: 1 / 1;
 }
 
@@ -130,7 +180,7 @@
 /* FOOTER */
 #footer {
     flex: 0 0 8vh;
-    background-color: rgb(50, 100, 250);
+    background-color: rgb(23, 117, 204);
     display: flex;
     justify-content: center;
     align-items: center;
