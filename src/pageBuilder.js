@@ -1,5 +1,5 @@
 import { Ship } from "./ship";
-import { drawHits, drawShips } from "./drawBoard";
+import { clearOldShip, drawShips } from "./drawBoard";
 
 let GAME_MANAGER = null;
 
@@ -111,22 +111,36 @@ function buildBoard(sizeX, sizeY, player = false) {
                 newBox.ondragover = allowDrop;
                 newBox.ondragenter = highlightDropPoint;
                 newBox.ondragleave = unHighlightDropPoint;
+
+                newBox.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    rightClickRotate({x: x, y: y});
+                    return false;
+                }, false);
             } else {
                 newBox.classList.add("enemyBox");
             }
+
             newBoard.append(newBox);
         }
     }
     return newBoard;
 }
 
+function rightClickRotate(pos) {
+    const shipData = GAME_MANAGER.pBoard.getShip(pos);
+    if(!shipData) return;
+
+    const board = document.getElementById("playerBoard");
+    clearOldShip(GAME_MANAGER.pBoard, board, shipData.pos);
+    GAME_MANAGER.pBoard.rotateShip(shipData);
+    drawShips(GAME_MANAGER.pBoard, board);
+}
+
 function hightlight(gameboard, data, reverse = false) {
 
     const curIndex = +data.x + ( data.y * 10 );
     const curBox = gameboard.children[curIndex];
-    console.log("Highlight box :");
-    console.log(!reverse, curBox);
-    console.log("Following box : ", gameboard.children[curIndex+1]);
 
     if(reverse) {
         curBox.classList.remove("highlightbox");
@@ -139,8 +153,6 @@ function highlightDropPoint(e) {
     e.preventDefault();
     const data = e.target.dataset;
     const gameboard = document.getElementById("playerBoard");
-
-    console.log("Box entered :", e.target);
     
     hightlight(gameboard, data);
 }
@@ -230,7 +242,6 @@ function enableButton(enable = true) {
 
 function enableBoard(board, enable = true) {
     for (const box of board.children) {
-        console.log(box);
         box.disabled = !enable;
 
         if(enable){

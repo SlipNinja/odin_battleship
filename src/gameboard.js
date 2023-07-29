@@ -3,7 +3,7 @@
 /*
 [
     {
-        ship: <Ship>,
+        object: <Ship>,
         pos: [{x: 0, y: 0}, ...],
         rotated: <bool>
     }
@@ -82,9 +82,14 @@ class Gameboard{
 
     // Rotate ship vertically if horizontal and vice versa
     rotateShip(shipData){
+        console.log("Rotated : ", shipData.rotated);
         const invertedRotation = !shipData.rotated;
+
         const posList = this.computePos(shipData.pos[0], shipData.object.length, invertedRotation);
+        console.log(posList);
+        
         if(this.validPos(posList, shipData)){
+            console.log("It's valid");
             shipData.pos = posList;
             shipData.rotated = invertedRotation;
         }
