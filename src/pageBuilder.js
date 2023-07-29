@@ -37,9 +37,14 @@ function buildHeader() {
 
     const logo = document.createElement("div");
     logo.id = "logo";
-    logo.innerHTML = "&#8618 LOGO HERE";
+    logo.innerHTML = "&#9875";
+
+    const logoText = document.createElement("div");
+    logoText.id = "logoText";
+    logoText.innerHTML = "BATTLESHIP HEROES";
 
     header.appendChild(logo);
+    header.appendChild(logoText);
 
     return header;
 }

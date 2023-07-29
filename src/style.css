@@ -21,23 +21,29 @@
 /* HEADER */
 #header {
     flex: 0 0 6vh;
-    background-color: red;
+    background-color: rgb(15, 78, 136);
     display: flex;
     justify-content: flex-start;
+    align-items: center;
+    border-bottom: 2mm ridge rgba(27, 40, 76, 0.6);
+}
+
+#logo, #logoText {
+    min-width: fit-content;
+    height: 4vh;
+    display: flex;
+    justify-content: center;
     align-items: center;
 }
 
 #logo {
-    background-color: blueviolet;
-    min-width: fit-content;
-    width: 200px;
-    height: 4vh;
     margin-left: 20px;
     padding-left: 10px;
-    padding-right: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    font-size: 1.5em;
+}
+
+#logoText {
+    width: 200px;
 }
 
 /* CONTENT */
@@ -118,6 +124,7 @@
 
 #leftText, #rightText {
     justify-self: center;
+    padding-top: 10px;
 }
 
 #playerBoard, #enemyBoard {

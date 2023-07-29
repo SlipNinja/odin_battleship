@@ -36,7 +36,7 @@ function drawHits(board, actualBoard) {
             if(hit === 1){
                 box.innerHTML = "&#128165";
             } else if(hit === 2){
-                box.innerHTML = "&#128166";
+                box.innerHTML = "&#127754";
             }
         }   
     }
