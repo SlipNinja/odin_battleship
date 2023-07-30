@@ -18,7 +18,7 @@ class GameManager{
         this.logs = null;
         this.botFinished = true;
         //this.sizeList = [5, 4, 3, 3, 2, 2, 1];
-        this.sizeList = [ 5 ];
+        this.sizeList = [ 5, 5, 5 ];
     }
 
     // Bot tries to play a move
@@ -28,6 +28,12 @@ class GameManager{
 
         // Actual move
         this.bot.makeMove(this.pBoard, randomMove);
+
+        // If a ship was touched, get nearby positions
+        const hitResult = this.pBoard.hits[randomMove.x][randomMove.y];
+        if(hitResult == 1){
+            this.bot.addTargets(this.pBoard.getValidTargets(randomMove));
+        }
 
         const shipSunk = shipsAliveBeforeHit > this.bBoard.shipsAlive().length;
         this.logFromHit(this.bot, this.pBoard, randomMove.x, randomMove.y, shipSunk);
@@ -132,6 +138,7 @@ class GameManager{
         
         this.pBoard.reset();
         this.bBoard.reset();
+        this.bot.resetTargets();
         mainElement.remove();
 
         buildPage(this);

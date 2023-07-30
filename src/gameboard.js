@@ -41,6 +41,29 @@ class Gameboard{
         return inBound && !(overlap);
     }
 
+    getValidTargets(move){
+        const targets = this.getTargets(move);
+        const inBoundTargets = targets.filter(this.inGrid);
+        const validTargets = inBoundTargets.filter(this.validTarget.bind(this));
+
+        return validTargets;
+    }
+
+    getTargets(move){
+        const targets = [];
+
+        targets.push({x: move.x + 1, y: move.y});
+        targets.push({x: move.x - 1, y: move.y});
+        targets.push({x: move.x, y: move.y + 1});
+        targets.push({x: move.x, y: move.y - 1});
+
+        return targets;
+    }
+
+    validTarget(pos){
+        return this.hits[pos.x][pos.y] == "0";
+    }
+
     // Returns true if pos is inbound
     // Arrow function notation to bind the Gameboard to this
     inGrid = (pos) => {

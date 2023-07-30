@@ -238,7 +238,7 @@ function fillLeftPanelWithBoats(sizeList) {
 
     const dragText = document.createElement("div");
     dragText.id = "dragText";
-    dragText.innerHTML = "Please drag your ships to legal positions<br/>Use right click to rotate a ship";
+    dragText.innerHTML = "Please drag your ships to legal positions<br/>Use right click to rotate a ship<br/><br/>Press Start when you're ready !";
     leftPanel.appendChild(dragText);
 }
 

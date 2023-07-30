@@ -156,7 +156,7 @@ button:active:not(.disabled) {
 }
 
 .ship.dead {
-    background-color: rgb(192, 8, 57);
+    background-color: rgb(111, 13, 39);
 }
 
 .displaybox {
@@ -172,6 +172,7 @@ button:active:not(.disabled) {
 #dragText {
     font-size: 1.3rem;
     padding-top: 20px;
+    justify-self: flex-end;
 }
 
 .enemyBox:hover[data-hit="false"]:not(.disabled) {
