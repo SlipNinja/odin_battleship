@@ -17,13 +17,13 @@ class GameManager{
         this.actualEnemyBoard = null;
         this.logs = null;
         this.botFinished = true;
-        //this.sizeList = [5, 4, 3, 3, 2, 2, 1];
-        this.sizeList = [ 5, 5, 5 ];
+        this.sizeList = [5, 4, 3, 3, 2, 2, 1];
+        //this.sizeList = [ 5, 5, 5 ];
     }
 
     // Bot tries to play a move
     botPlays = () => {
-        const shipsAliveBeforeHit = this.bBoard.shipsAlive().length;
+        const shipsAliveBeforeHit = this.pBoard.shipsAlive().length;
         const randomMove = this.bot.getRandomMove(this.pBoard);
 
         // Actual move
@@ -35,7 +35,12 @@ class GameManager{
             this.bot.addTargets(this.pBoard.getValidTargets(randomMove));
         }
 
-        const shipSunk = shipsAliveBeforeHit > this.bBoard.shipsAlive().length;
+        const shipSunk = shipsAliveBeforeHit > this.pBoard.shipsAlive().length;
+        if(shipSunk){
+            console.log("Player ship down");
+            const shipHit = this.pBoard.getShip(randomMove);
+            this.sunkShip(shipHit, this.pBoard, this.actualPlayerBoard);
+        }
         this.logFromHit(this.bot, this.pBoard, randomMove.x, randomMove.y, shipSunk);
 
         this.drawGame();
@@ -46,8 +51,6 @@ class GameManager{
     playerPlayed = (e) => {
 
         if(this.gameOver) return;
-        if(this.botFinished == false) console.log("ITS FALSE !");
-        if(this.botFinished == false) return;
 
         // Player's turn
         const box = e.target;
