@@ -3,6 +3,7 @@ import { clearOldShip, drawShips } from "./drawBoard";
 
 let GAME_MANAGER = null;
 
+// Build the whole page
 function buildPage(manager = null) {
 
     if(GAME_MANAGER == null) GAME_MANAGER = manager;
@@ -15,23 +16,25 @@ function buildPage(manager = null) {
     enableButton(false);
 }
 
+// Build the main element
 function buildMainElement() {
     // Creates DOM elements
     const mainElement = document.createElement("div");
     mainElement.id = "mainElement";
 
+    // Build main sub-elements
     const header = buildHeader();
     const content = buildContent();
     const footer = buildFooter();
 
     // Links DOM elements
-
     mainElement.appendChild(header);
     mainElement.appendChild(content);
     mainElement.appendChild(footer);
     document.body.appendChild(mainElement);
 }
 
+// Build header
 function buildHeader() {
     const header = document.createElement("div");
     header.id = "header";
@@ -50,6 +53,7 @@ function buildHeader() {
     return header;
 }
 
+// Build content
 function buildContent() {
     const content = document.createElement("div");
     content.id = "content";
@@ -86,6 +90,7 @@ function buildContent() {
     return content;
 }
 
+// Build both boards from dimensions
 function buildBoards(sizeX, sizeY) {
     const leftBoard = document.getElementById("leftBoard");
     const rightBoard = document.getElementById("rightBoard");
@@ -100,11 +105,13 @@ function buildBoards(sizeX, sizeY) {
     rightBoard.appendChild(enemyBoard);
 }
 
+// Build a board from dimension
 function buildBoard(sizeX, sizeY, player = false) {
     const newBoard = document.createElement("div");
     newBoard.style.gridTemplateColumns = `repeat(${sizeX}, 1fr)`;
     newBoard.style.gridTemplateRows = `repeat(${sizeY}, 1fr)`;
 
+    // Build boxes
     for (let y = 0; y < sizeY; y++) {
         for (let x = 0; x < sizeX; x++) {
             const newBox = document.createElement("div");
@@ -112,6 +119,7 @@ function buildBoard(sizeX, sizeY, player = false) {
             newBox.dataset.y = y;
             newBox.dataset.hit = false;
             
+            // Setup player board's boxes listeners
             if(player){
                 newBox.classList.add("box");
                 newBox.ondrop = tryPlacingBoat;
@@ -134,6 +142,7 @@ function buildBoard(sizeX, sizeY, player = false) {
     return newBoard;
 }
 
+// Rotate ship by rightclick during placement phase
 function rightClickRotate(pos) {
     const shipData = GAME_MANAGER.pBoard.getShip(pos);
     if(!shipData) return;
@@ -144,6 +153,7 @@ function rightClickRotate(pos) {
     drawShips(GAME_MANAGER.pBoard, board);
 }
 
+// Highlight/unhighlight current box
 function hightlight(gameboard, data, reverse = false) {
 
     const curIndex = +data.x + ( data.y * 10 );
@@ -156,6 +166,7 @@ function hightlight(gameboard, data, reverse = false) {
     }
 }
 
+// Highlight current box during placement phase
 function highlightDropPoint(e) {
     e.preventDefault();
     const data = e.target.dataset;
@@ -164,6 +175,7 @@ function highlightDropPoint(e) {
     hightlight(gameboard, data);
 }
 
+// Unhighlight current box during placement phase
 function unHighlightDropPoint(e) {
     e.preventDefault();
     const data = e.target.dataset;
@@ -172,6 +184,7 @@ function unHighlightDropPoint(e) {
     hightlight(gameboard, data, true);
 }
 
+// Try to add ship from drop
 function tryPlacingBoat(e) {
     e.preventDefault();
     const data = e.target.dataset;
@@ -183,11 +196,13 @@ function tryPlacingBoat(e) {
     const currentShipNumber = playerBoard.ships.length;
     const shipSize = +e.dataTransfer.getData("text/plain");
     
+    // Actual add
     const newShip = new Ship(shipSize);
     playerBoard.addShip(newShip, {x: +data.x, y: +data.y});
 
+    // If addition was successfull
     if(currentShipNumber < playerBoard.ships.length){
-        //Remove ship from ship list
+        //Remove boat from boat list
         const boatPanel = document.getElementById("leftPanel");
         for (const child of boatPanel.children) {
             if( child.children.length == shipSize ){
@@ -196,6 +211,7 @@ function tryPlacingBoat(e) {
             }
         }
 
+        // If only the text element is remaining
         if(boatPanel.children.length <= 1){
             // Allow game start
             enableButton();
@@ -206,17 +222,20 @@ function tryPlacingBoat(e) {
     drawShips(playerBoard, gameboard);
 }
 
+// Setup drag and drop
 function allowDrop(e) {
     e.preventDefault();
     e.dataTransfer.dropEffect = "move";
 }
 
+// Clear all children for DOM element
 function clearElementChildren(element) {
     while (element.firstChild) {
-        element.removeChild(myNode.lastChild);
+        element.removeChild(element.lastChild);
     }
 }
 
+// Build boat list
 function fillLeftPanelWithBoats(sizeList) {
     const leftPanel = document.getElementById("leftPanel");
     clearElementChildren(leftPanel);
@@ -242,6 +261,7 @@ function fillLeftPanelWithBoats(sizeList) {
     leftPanel.appendChild(dragText);
 }
 
+// Change start button disabled state
 function enableButton(enable = true) {
     const startbtn = document.getElementById("mainButton");
     startbtn.disabled = !enable;
@@ -254,6 +274,7 @@ function enableButton(enable = true) {
     
 }
 
+// Change board's boxes disabled state
 function enableBoard(board, enable = true) {
     for (const box of board.children) {
         box.disabled = !enable;
@@ -266,16 +287,12 @@ function enableBoard(board, enable = true) {
     }
 }
 
-function fillLeftPanelWithLogs() {
-    const leftPanel = document.getElementById("leftPanel");
-    clearElementChildren(leftPanel);
-
-}
-
+// Store boat length at drag
 function boatDragged(e) {
     e.dataTransfer.setData("text/plain", e.target.children.length);
 }
 
+// Build footer
 function buildFooter() {
     const footer = document.createElement("div");
     footer.id = "footer";
@@ -291,16 +308,20 @@ function buildFooter() {
 }
 
 function startButtonClicked(e){
-    GAME_MANAGER.newGame();
+    // Setup new game and start it
+    GAME_MANAGER.setupGame();
+
+    // Disable start button
     enableButton(false);
 
     // Clear rotate listeners
     clearRotateListeners();
     
-    //TODO : Bring logs
+    // Creates logs panel
     showLogs();
 }
 
+// Remove rightclick listeners from boxes
 function clearRotateListeners(){
     const playerBoard = document.getElementById("playerBoard");
     for (const box of playerBoard.children) {
@@ -308,12 +329,10 @@ function clearRotateListeners(){
     }
 }
 
+// Create a logs panel
 function showLogs() {
     const leftPanel = document.getElementById("leftPanel");
-
-    while (leftPanel.firstChild) {
-        leftPanel.lastChild.remove();
-    }
+    clearElementChildren(leftPanel);
 
     const logsText = document.createElement("div");
     logsText.id = "logsText";
