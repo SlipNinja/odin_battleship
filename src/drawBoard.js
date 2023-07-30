@@ -1,4 +1,5 @@
 
+// Add classes to boxes to display ships
 function drawShips(board, actualBoard, hidden = false){
     for (let i = 0; i < board.ships.length; i++) {
         const shipData = board.ships[i];
@@ -16,14 +17,15 @@ function drawShips(board, actualBoard, hidden = false){
     }
 }
 
+// Clear board from old ship after rotation
 function clearOldShip(board, actualBoard, posData) {
-    console.log(posData);
     for (const pos of posData) {
         const box = actualBoard.children[pos.y*board.width + pos.x];
         box.classList.remove("ship");
     }
 }
 
+// Display hit results on board
 function drawHits(board, actualBoard) {
     for (let x = 0; x < board.hits.length; x++) {
         for (let y = 0; y < board.hits[x].length; y++) {

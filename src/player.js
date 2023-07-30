@@ -15,6 +15,7 @@ class Player {
         return moves[randomIndex];
     }
 
+    // Returns one random target
     getRandomTarget(){
         const randomIndex = Math.floor(Math.random() * this.bestTargets.length);
         const move = this.bestTargets[randomIndex];
@@ -25,10 +26,12 @@ class Player {
         return move;
     }
 
+    // Add a list of new targets to current target list
     addTargets(posList){
         this.bestTargets = [...new Set([...this.bestTargets, ...posList])];
     }
 
+    // Clear target list
     resetTargets(){
         this.bestTargets = [];
     }

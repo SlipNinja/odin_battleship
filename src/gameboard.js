@@ -41,6 +41,7 @@ class Gameboard{
         return inBound && !(overlap);
     }
 
+    // Get valid targets from position
     getValidTargets(move){
         const targets = this.getTargets(move);
         const inBoundTargets = targets.filter(this.inGrid);
@@ -49,6 +50,7 @@ class Gameboard{
         return validTargets;
     }
 
+    // Get adjacent positions
     getTargets(move){
         const targets = [];
 
@@ -60,8 +62,9 @@ class Gameboard{
         return targets;
     }
 
+    // If pos isn't already hit
     validTarget(pos){
-        return this.hits[pos.x][pos.y] == "0";
+        return this.getHitAt(pos) == "0";
     }
 
     // Returns true if pos is inbound
@@ -168,6 +171,8 @@ class Gameboard{
         return alive;
     }
 
+
+    // Return hit data at pos
     getHitAt(pos){
         return this.hits[pos.x][pos.y];
     }
@@ -183,6 +188,7 @@ class Gameboard{
         return false;
     }
 
+    // Randomly place ships
     randomlyPlaceShips(ships){
         for (let i = 0; i < ships.length; i++) {
 
@@ -199,6 +205,7 @@ class Gameboard{
         }
     }
 
+    // Get random int between 0 and max
     getRandomInt(max){
         return Math.floor(Math.random()*max);
     }
