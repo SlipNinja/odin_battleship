@@ -377,7 +377,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, `* {
     flex: 4;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 20px;
     align-items: center;
     padding-top: 2.3vh;
 }
@@ -397,14 +397,19 @@ ___CSS_LOADER_EXPORT___.push([module.id, `* {
     flex-direction: column;
     overflow: auto;
     background-color: rgb(41, 60, 107);
-    height: 80%;
+    height: 60vh;
+    max-height: 60vh;
     border: 2mm ridge rgba(27, 40, 76, 0.6);
     color: white;
-    font-size: 1rem;
+    font-size: 1.1rem;
+    gap: 10px;
+}
+
+#logs > .gold {
+    color: gold;
 }
 
 .logLine {
-    margin-top: 15px;
     margin-left: 10px;
 }
 
@@ -468,6 +473,10 @@ button:active:not(.disabled) {
     font-size: 2.1vw;
 }
 
+.ship.dead {
+    background-color: rgb(111, 13, 39);
+}
+
 .displaybox {
     background-color: rgb(34, 168, 136);
     border: 1px solid rgb(0, 50, 50);
@@ -476,6 +485,16 @@ button:active:not(.disabled) {
 
 .boat {
     display: flex;
+}
+
+.boat:hover {
+    box-shadow: 0px 0px 20px rgb(102, 227, 102);
+}
+
+#dragText {
+    font-size: 1.3rem;
+    padding-top: 20px;
+    justify-self: flex-end;
 }
 
 .enemyBox:hover[data-hit="false"]:not(.disabled) {
@@ -682,6 +701,7 @@ __webpack_require__.r(__webpack_exports__);
 
 let GAME_MANAGER = null;
 
+// Build the whole page
 function buildPage(manager = null) {
 
     if(GAME_MANAGER == null) GAME_MANAGER = manager;
@@ -694,23 +714,25 @@ function buildPage(manager = null) {
     enableButton(false);
 }
 
+// Build the main element
 function buildMainElement() {
     // Creates DOM elements
     const mainElement = document.createElement("div");
     mainElement.id = "mainElement";
 
+    // Build main sub-elements
     const header = buildHeader();
     const content = buildContent();
     const footer = buildFooter();
 
     // Links DOM elements
-
     mainElement.appendChild(header);
     mainElement.appendChild(content);
     mainElement.appendChild(footer);
     document.body.appendChild(mainElement);
 }
 
+// Build header
 function buildHeader() {
     const header = document.createElement("div");
     header.id = "header";
@@ -729,6 +751,7 @@ function buildHeader() {
     return header;
 }
 
+// Build content
 function buildContent() {
     const content = document.createElement("div");
     content.id = "content";
@@ -765,6 +788,7 @@ function buildContent() {
     return content;
 }
 
+// Build both boards from dimensions
 function buildBoards(sizeX, sizeY) {
     const leftBoard = document.getElementById("leftBoard");
     const rightBoard = document.getElementById("rightBoard");
@@ -779,11 +803,13 @@ function buildBoards(sizeX, sizeY) {
     rightBoard.appendChild(enemyBoard);
 }
 
+// Build a board from dimension
 function buildBoard(sizeX, sizeY, player = false) {
     const newBoard = document.createElement("div");
     newBoard.style.gridTemplateColumns = `repeat(${sizeX}, 1fr)`;
     newBoard.style.gridTemplateRows = `repeat(${sizeY}, 1fr)`;
 
+    // Build boxes
     for (let y = 0; y < sizeY; y++) {
         for (let x = 0; x < sizeX; x++) {
             const newBox = document.createElement("div");
@@ -791,6 +817,7 @@ function buildBoard(sizeX, sizeY, player = false) {
             newBox.dataset.y = y;
             newBox.dataset.hit = false;
             
+            // Setup player board's boxes listeners
             if(player){
                 newBox.classList.add("box");
                 newBox.ondrop = tryPlacingBoat;
@@ -813,6 +840,7 @@ function buildBoard(sizeX, sizeY, player = false) {
     return newBoard;
 }
 
+// Rotate ship by rightclick during placement phase
 function rightClickRotate(pos) {
     const shipData = GAME_MANAGER.pBoard.getShip(pos);
     if(!shipData) return;
@@ -823,6 +851,7 @@ function rightClickRotate(pos) {
     (0,_drawBoard__WEBPACK_IMPORTED_MODULE_1__.drawShips)(GAME_MANAGER.pBoard, board);
 }
 
+// Highlight/unhighlight current box
 function hightlight(gameboard, data, reverse = false) {
 
     const curIndex = +data.x + ( data.y * 10 );
@@ -835,6 +864,7 @@ function hightlight(gameboard, data, reverse = false) {
     }
 }
 
+// Highlight current box during placement phase
 function highlightDropPoint(e) {
     e.preventDefault();
     const data = e.target.dataset;
@@ -843,6 +873,7 @@ function highlightDropPoint(e) {
     hightlight(gameboard, data);
 }
 
+// Unhighlight current box during placement phase
 function unHighlightDropPoint(e) {
     e.preventDefault();
     const data = e.target.dataset;
@@ -851,6 +882,7 @@ function unHighlightDropPoint(e) {
     hightlight(gameboard, data, true);
 }
 
+// Try to add ship from drop
 function tryPlacingBoat(e) {
     e.preventDefault();
     const data = e.target.dataset;
@@ -862,11 +894,13 @@ function tryPlacingBoat(e) {
     const currentShipNumber = playerBoard.ships.length;
     const shipSize = +e.dataTransfer.getData("text/plain");
     
+    // Actual add
     const newShip = new _ship__WEBPACK_IMPORTED_MODULE_0__.Ship(shipSize);
     playerBoard.addShip(newShip, {x: +data.x, y: +data.y});
 
+    // If addition was successfull
     if(currentShipNumber < playerBoard.ships.length){
-        //Remove ship from ship list
+        //Remove boat from boat list
         const boatPanel = document.getElementById("leftPanel");
         for (const child of boatPanel.children) {
             if( child.children.length == shipSize ){
@@ -875,6 +909,7 @@ function tryPlacingBoat(e) {
             }
         }
 
+        // If only the text element is remaining
         if(boatPanel.children.length <= 1){
             // Allow game start
             enableButton();
@@ -885,17 +920,20 @@ function tryPlacingBoat(e) {
     (0,_drawBoard__WEBPACK_IMPORTED_MODULE_1__.drawShips)(playerBoard, gameboard);
 }
 
+// Setup drag and drop
 function allowDrop(e) {
     e.preventDefault();
     e.dataTransfer.dropEffect = "move";
 }
 
+// Clear all children for DOM element
 function clearElementChildren(element) {
     while (element.firstChild) {
-        element.removeChild(myNode.lastChild);
+        element.removeChild(element.lastChild);
     }
 }
 
+// Build boat list
 function fillLeftPanelWithBoats(sizeList) {
     const leftPanel = document.getElementById("leftPanel");
     clearElementChildren(leftPanel);
@@ -917,10 +955,11 @@ function fillLeftPanelWithBoats(sizeList) {
 
     const dragText = document.createElement("div");
     dragText.id = "dragText";
-    dragText.innerHTML = "Please drag your ships to legal positions<br/>Use right click to rotate a ship";
+    dragText.innerHTML = "Please drag your ships to legal positions<br/>Use right click to rotate a ship<br/><br/>Press Start when you're ready !";
     leftPanel.appendChild(dragText);
 }
 
+// Change start button disabled state
 function enableButton(enable = true) {
     const startbtn = document.getElementById("mainButton");
     startbtn.disabled = !enable;
@@ -933,6 +972,7 @@ function enableButton(enable = true) {
     
 }
 
+// Change board's boxes disabled state
 function enableBoard(board, enable = true) {
     for (const box of board.children) {
         box.disabled = !enable;
@@ -945,16 +985,12 @@ function enableBoard(board, enable = true) {
     }
 }
 
-function fillLeftPanelWithLogs() {
-    const leftPanel = document.getElementById("leftPanel");
-    clearElementChildren(leftPanel);
-
-}
-
+// Store boat length at drag
 function boatDragged(e) {
     e.dataTransfer.setData("text/plain", e.target.children.length);
 }
 
+// Build footer
 function buildFooter() {
     const footer = document.createElement("div");
     footer.id = "footer";
@@ -970,16 +1006,20 @@ function buildFooter() {
 }
 
 function startButtonClicked(e){
-    GAME_MANAGER.newGame();
+    // Setup new game and start it
+    GAME_MANAGER.setupGame();
+
+    // Disable start button
     enableButton(false);
 
     // Clear rotate listeners
     clearRotateListeners();
     
-    //TODO : Bring logs
+    // Creates logs panel
     showLogs();
 }
 
+// Remove rightclick listeners from boxes
 function clearRotateListeners(){
     const playerBoard = document.getElementById("playerBoard");
     for (const box of playerBoard.children) {
@@ -987,12 +1027,10 @@ function clearRotateListeners(){
     }
 }
 
+// Create a logs panel
 function showLogs() {
     const leftPanel = document.getElementById("leftPanel");
-
-    while (leftPanel.firstChild) {
-        leftPanel.lastChild.remove();
-    }
+    clearElementChildren(leftPanel);
 
     const logsText = document.createElement("div");
     logsText.id = "logsText";
@@ -1000,20 +1038,6 @@ function showLogs() {
 
     const logs = document.createElement("div");
     logs.id = "logs";
-
-    const line1 = document.createElement("p");
-    line1.innerHTML = "Blabla";
-    const line2 = document.createElement("p");
-    line2.innerHTML = "Blablabla";
-    const line3 = document.createElement("p");
-    line3.innerHTML = "Blabla";
-    line1.classList.add("logLine");
-    line2.classList.add("logLine");
-    line3.classList.add("logLine");
-
-    logs.appendChild(line1);
-    logs.appendChild(line2);
-    logs.appendChild(line3);
 
     const newGameButton = document.createElement("button");
     newGameButton.id = "newGameButton";
@@ -1066,10 +1090,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   drawShips: () => (/* binding */ drawShips)
 /* harmony export */ });
 
+// Add classes to boxes to display ships
 function drawShips(board, actualBoard, hidden = false){
     for (let i = 0; i < board.ships.length; i++) {
         const shipData = board.ships[i];
-        console.log(shipData.pos);
 
         for (let j = 0; j < shipData.pos.length; j++) {
             const pos = shipData.pos[j];
@@ -1079,20 +1103,20 @@ function drawShips(board, actualBoard, hidden = false){
                 box.classList.add("ship");
             } else {
                 box.classList.remove("ship");
-                console.log("REMOVED SHIP : ", box.classList);
             }
         }
     }
 }
 
+// Clear board from old ship after rotation
 function clearOldShip(board, actualBoard, posData) {
-    console.log(posData);
     for (const pos of posData) {
         const box = actualBoard.children[pos.y*board.width + pos.x];
         box.classList.remove("ship");
     }
 }
 
+// Display hit results on board
 function drawHits(board, actualBoard) {
     for (let x = 0; x < board.hits.length; x++) {
         for (let y = 0; y < board.hits[x].length; y++) {
@@ -1123,13 +1147,38 @@ __webpack_require__.r(__webpack_exports__);
 class Player {
     constructor(name){
         this.name = name;
+        this.bestTargets = [];
     }
 
     // Returns one random possible move
     getRandomMove(board){
+
+        if(this.bestTargets.length > 0) return this.getRandomTarget();
+
         const moves = this.possibleMoves(board);
         const randomIndex = Math.floor(Math.random() * moves.length);
         return moves[randomIndex];
+    }
+
+    // Returns one random target
+    getRandomTarget(){
+        const randomIndex = Math.floor(Math.random() * this.bestTargets.length);
+        const move = this.bestTargets[randomIndex];
+
+        // Remove target from list
+        this.bestTargets = this.bestTargets.filter(pos => (pos.x != move.x) || (pos.y != move.y));
+
+        return move;
+    }
+
+    // Add a list of new targets to current target list
+    addTargets(posList){
+        this.bestTargets = [...new Set([...this.bestTargets, ...posList])];
+    }
+
+    // Clear target list
+    resetTargets(){
+        this.bestTargets = [];
     }
 
     // Returns all possible moves
@@ -1180,14 +1229,34 @@ class GameManager{
         this.sizeY = 10;
         this.actualPlayerBoard = null;
         this.actualEnemyBoard = null;
-        //this.sizeList = [5, 4, 3, 3, 2, 2, 1];
-        this.sizeList = [ 5 ];
+        this.logs = null;
+        this.botFinished = true;
+        this.sizeList = [5, 4, 3, 3, 2, 2, 1];
+        //this.sizeList = [ 5, 5, 5 ];
     }
 
     // Bot tries to play a move
     botPlays = () => {
+        const shipsAliveBeforeHit = this.pBoard.shipsAlive().length;
         const randomMove = this.bot.getRandomMove(this.pBoard);
+
+        // Actual move
         this.bot.makeMove(this.pBoard, randomMove);
+
+        // If a ship was touched, get nearby positions
+        const hitResult = this.pBoard.hits[randomMove.x][randomMove.y];
+        if(hitResult == 1){
+            this.bot.addTargets(this.pBoard.getValidTargets(randomMove));
+        }
+
+        // Handle ship sunk display
+        const shipSunk = shipsAliveBeforeHit > this.pBoard.shipsAlive().length;
+        if(shipSunk){
+            const shipHit = this.pBoard.getShip(randomMove);
+            this.sunkShip(shipHit, this.pBoard, this.actualPlayerBoard);
+        }
+
+        this.logFromHit(this.bot, this.pBoard, randomMove.x, randomMove.y, shipSunk);
         this.drawGame();
         return true;
     }
@@ -1201,9 +1270,19 @@ class GameManager{
         const box = e.target;
         if(box.dataset.hit === "true") return;
 
-        const positionClicked = { x: box.dataset.x, y: box.dataset.y };
+        // Handle ship hit
+        const shipsAliveBeforeHit = this.bBoard.shipsAlive().length;
+        const positionClicked = { x: +box.dataset.x, y: +box.dataset.y };
         box.dataset.hit = true;
         this.bBoard.receiveAttack(positionClicked);
+
+        const shipSunk = shipsAliveBeforeHit > this.bBoard.shipsAlive().length;
+        this.logFromHit(this.player, this.bBoard, box.dataset.x, box.dataset.y, shipSunk);
+
+        if(shipSunk){
+            const shipHit = this.bBoard.getShip(positionClicked);
+            this.sunkShip(shipHit, this.bBoard, this.actualEnemyBoard);
+        }
 
         this.drawGame();
     
@@ -1215,9 +1294,9 @@ class GameManager{
         // If not then it's bot's turn
         } else {
             // Bot plays with a short delay
-            let botFinished = false;
-            botFinished = setTimeout(this.botPlays, 400);
-            while(!botFinished){};// Wait for the bot move
+            this.botFinished = false;
+            this.botFinished = setTimeout(this.botPlays, 400);
+            while(!this.botFinished){};// Wait for the bot move
 
             // Test if bot wins
             if(this.pBoard.shipsAlive().length <= 0){
@@ -1228,29 +1307,69 @@ class GameManager{
         
         // Check if game is over
         if(this.gameOver){
-            console.log(`The winner is ${this.winner.name} !`);
+            this.log(`The winner is ${this.winner.name} !`, true);
             return;
         }
     };
 
+    // Display sunk ships
+    sunkShip(ship, board, actualBoard) {
+        for (const pos of ship.pos) {
+            const curBox = actualBoard.children[pos.y*board.width + pos.x];
+            curBox.classList.add("dead");
+        }
+    }
+
+    // Log hits
+    logFromHit(player, board, posX, posY, sunk){
+        const hitResult = board.hits[posX][posY];
+        let resultText = "";
+        let gold = false;
+
+        if(sunk){
+            resultText = "and sunk an opposite ship !";
+            gold = true;
+        } else {
+            if(hitResult == "2"){// 2 is miss, 1 is hit
+                resultText = "and misses..";
+            } else {
+                resultText = "and hit a ship !"
+                gold = true;
+            }
+        }
+
+        const text = `${player.name} fires at position [${posX+1};${posY+1}] ${resultText}`;
+        this.log(text, gold);
+    }
+
+    // Log
+    log(text, gold = false){
+        this.logs = document.getElementById("logs");
+        const newLog = document.createElement("p");
+        newLog.innerHTML = text;
+        newLog.classList.add("logLine");
+        if(gold) newLog.classList.add("gold");
+        this.logs.appendChild(newLog);
+        this.logs.scrollTop = this.logs.scrollHeight;
+    }
+
+    // Restart a game
     restartGame(){
-        console.log(this);
-        const mainElement = document.getElementById("mainElement");
-        
+
+        // Reset everything
         this.pBoard.reset();
         this.bBoard.reset();
+        this.bot.resetTargets();
+
+        // Remove every elements
+        const mainElement = document.getElementById("mainElement");
         mainElement.remove();
 
+        // Build again
         (0,_pageBuilder__WEBPACK_IMPORTED_MODULE_1__.buildPage)(this);
-
-        
     }
 
-    newGame() {
-        this.setupGame();
-        this.drawGame();
-    }
-
+    // Setup game
     setupGame() {
         // Initialize game variables
         this.gameOver = false;
@@ -1258,12 +1377,11 @@ class GameManager{
         this.actualPlayerBoard = document.getElementById("playerBoard");
         this.actualEnemyBoard = document.getElementById("enemyBoard");
 
-        // Initialize boards with random ship placement
+        // Initialize enemy board with random ship placement
         const shipArray = [];
         for (const size of this.sizeList) {
             shipArray.push(new _ship__WEBPACK_IMPORTED_MODULE_3__.Ship(size));
         }
-
         this.bBoard.randomlyPlaceShips(shipArray);
 
         // Add boxes events for taking turn
@@ -1272,6 +1390,7 @@ class GameManager{
         }
     }
 
+    // Draw boards
     drawGame() {
         (0,_drawBoard__WEBPACK_IMPORTED_MODULE_2__.drawShips)(this.pBoard, this.actualPlayerBoard);
         (0,_drawBoard__WEBPACK_IMPORTED_MODULE_2__.drawShips)(this.bBoard, this.actualEnemyBoard, true);
@@ -1332,6 +1451,32 @@ class Gameboard{
         const inBound = pos.every(this.inGrid);
         const overlap = this.overlapShip(pos, ship);
         return inBound && !(overlap);
+    }
+
+    // Get valid targets from position
+    getValidTargets(move){
+        const targets = this.getTargets(move);
+        const inBoundTargets = targets.filter(this.inGrid);
+        const validTargets = inBoundTargets.filter(this.validTarget.bind(this));
+
+        return validTargets;
+    }
+
+    // Get adjacent positions
+    getTargets(move){
+        const targets = [];
+
+        targets.push({x: move.x + 1, y: move.y});
+        targets.push({x: move.x - 1, y: move.y});
+        targets.push({x: move.x, y: move.y + 1});
+        targets.push({x: move.x, y: move.y - 1});
+
+        return targets;
+    }
+
+    // If pos isn't already hit
+    validTarget(pos){
+        return this.getHitAt(pos) == "0";
     }
 
     // Returns true if pos is inbound
@@ -1438,6 +1583,8 @@ class Gameboard{
         return alive;
     }
 
+
+    // Return hit data at pos
     getHitAt(pos){
         return this.hits[pos.x][pos.y];
     }
@@ -1453,6 +1600,7 @@ class Gameboard{
         return false;
     }
 
+    // Randomly place ships
     randomlyPlaceShips(ships){
         for (let i = 0; i < ships.length; i++) {
 
@@ -1469,6 +1617,7 @@ class Gameboard{
         }
     }
 
+    // Get random int between 0 and max
     getRandomInt(max){
         return Math.floor(Math.random()*max);
     }
